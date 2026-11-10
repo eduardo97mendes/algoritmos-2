@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142d36">
+  <meta name="description" content="Aprenda algoritmos, vetor, matriz, procedimento e função com missões Pokémon e atividades guiadas no Scratch.">
+  <title>PokéCode — Laboratório de algoritmos</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="lessons.js" defer></script>
+  <script src="guide.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para a missão</a>
+  <header class="topbar">
+    <a class="brand" href="#inicio"><span class="pokeball brand-ball" aria-hidden="true"></span><span>PokéCode<small>LABORATÓRIO DE ALGORITMOS</small></span></a>
+    <div class="top-actions"><button id="projector" class="button subtle" type="button" aria-pressed="false">Modo projetor</button><a class="button scratch-link" href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener noreferrer">Abrir Scratch <span aria-hidden="true">↗</span></a></div>
+  </header>
+  <div class="app-layout">
+    <aside class="sidebar" aria-label="Trilha de aprendizagem">
+      <div class="sidebar-intro"><span class="eyebrow">SEU MAPA DE MISSÕES</span><p>Uma ideia de cada vez.<br>Um projeto para descobrir.</p></div>
+      <nav id="missionNav" class="mission-nav" aria-label="Escolher missão"></nav>
+      <div class="journey-progress"><div><span>Seu percurso</span><strong id="progressText">0 de 8 missões</strong></div><progress id="courseProgress" max="8" value="0">0 de 8</progress><p>Teste no Scratch. Depois marque seu checklist.</p></div>
+    </aside>
+    <main id="conteudo" tabindex="-1">
+      <div id="homeView">
+        <section class="hero">
+          <div class="hero-copy"><span class="eyebrow green">1º ANO · PROGRAMAÇÃO COM POKÉMON</span><h1>Você comanda.<br><em>O Pokémon executa.</em></h1><p>Uma ideia. Um teste. Um passo no Scratch.<br>Aprenda a criar sua própria captura.</p><a class="button primary" href="#preparar">Começar pelo passo 1 <span aria-hidden="true">→</span></a><div class="hero-caption">Acompanhe o professor. Avance no seu ritmo.</div></div>
+          <div class="hero-art" role="img" aria-label="Pokébola sobre um mapa de exploração, com pontos que representam vetor, matriz e blocos de programação">
+            <svg viewBox="0 0 500 420" aria-hidden="true"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#d2e2d6" stroke-width="1"/></pattern></defs><rect x="20" y="20" width="460" height="380" rx="38" fill="#e8f1e8"/><rect x="20" y="20" width="460" height="380" rx="38" fill="url(#grid)"/><path d="M80 310H160V270H250V150H370V90" stroke="#a1c9a7" stroke-width="24" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M80 310H160V270H250V150H370V90" stroke="#fff" stroke-width="3" fill="none" stroke-dasharray="5 10"/><circle cx="250" cy="221" r="100" fill="#244b3d" opacity=".09"/><circle cx="250" cy="206" r="94" fill="#fff" stroke="#19333c" stroke-width="9"/><path d="M157 203a94 94 0 0 1 186 0Z" fill="#e95449"/><path d="M157 206h186" stroke="#19333c" stroke-width="13"/><circle cx="250" cy="206" r="27" fill="#fff" stroke="#19333c" stroke-width="9"/><circle cx="250" cy="206" r="11" fill="#edf4ee" stroke="#19333c" stroke-width="3"/><path d="M186 169a67 67 0 0 1 32-23" stroke="#ffb6a9" stroke-width="10" stroke-linecap="round" fill="none"/><circle cx="80" cy="310" r="11" fill="#edb74e" stroke="#19333c" stroke-width="4"/><circle cx="370" cy="90" r="11" fill="#e95449" stroke="#19333c" stroke-width="4"/></svg>
+            <span class="art-label art-one"><b>[1] [2] [3]</b> Sua equipe é um vetor</span><span class="art-label art-two"><b>▦</b> Sua região é uma matriz</span><span class="art-tag">MISSÃO: ENTENDER → CRIAR</span>
+          </div>
+        </section>
+        <div class="learning-loop"><span><b>1</b> Olhe</span><span aria-hidden="true">→</span><span><b>2</b> Experimente</span><span aria-hidden="true">→</span><span><b>3</b> Monte</span><span aria-hidden="true">→</span><span><b>4</b> Teste</span></div>
+        <section class="home-missions"><div class="section-title"><div><span class="eyebrow">SIGA A ORDEM COM A TURMA</span><h2>Seu caminho até a captura.</h2></div><p>Hoje: siga a missão indicada pelo professor.<br>As próximas continuam em outras aulas.</p></div><div id="missionCards" class="mission-cards"></div></section>
+        <aside class="movement-link"><div><h3>Mais movimentos para a sua aventura.</h3><p>Atores com fantasias, frente e costas, animações de captura e cenários para as próximas cenas.</p></div><a class="button primary" href="movimentos.html">Abrir oficina de movimentos →</a></aside>
+        <div class="class-note"><span class="note-symbol">↗</span><div><h3>Uma dupla. Dois programadores.</h3><p>Um monta. O outro testa. Na próxima missão, troquem.</p></div></div>
+      </div>
+      <div id="lessonView" hidden></div>
+      <footer><span>PokéCode · aprender, criar, testar.</span><span>Material de aula independente inspirado em Pokémon.</span></footer>
+    </main>
+  </div>
+  <noscript><p class="noscript">Ative o JavaScript do navegador para acessar as missões e os exemplos interativos. A página funciona sem instalação.</p></noscript>
+</body>
+</html>
