@@ -27,3 +27,87 @@
 @media(max-width:1050px){.focus-panel{padding:23px}.task-body.has-blocks{grid-template-columns:1fr;gap:20px}.task-blocks{max-width:100%;width:100%}.capture-story{gap:6px}.capture-story>div{padding:16px 6px}.capture-story b{font-size:.93rem}.capture-story small{font-size:.83rem}.coordinate-play{grid-template-columns:1.2fr 1fr;gap:18px}.coordinate-values>span{padding:7px 10px}.coordinate-values b{font-size:1.4rem}.idea-card{padding:15px 10px}.idea-card h3{font-size:1.04rem}.idea-picture{height:100px}.flow-nav button{font-size:.9rem}}
 @media(max-width:850px){.projector .app-layout{display:block}.guided-top{padding-top:24px}.guided-top .lesson-heading h1{font-size:2rem}.flow-nav button{font-size:1rem}.flow-footer{padding-bottom:12px}.focus-panel{padding:24px}.task-body.has-blocks{grid-template-columns:1fr 1fr}.coordinate-play{grid-template-columns:1.4fr 1fr}}
 @media(max-width:650px){.guided-top .breadcrumb{font-size:.73rem}.guided-top .lesson-heading h1{font-size:1.85rem}.guided-top .lesson-lede{font-size:1rem}.flow-nav{gap:3px;padding:4px}.flow-nav button{display:grid;justify-items:center;gap:6px;font-size:.74rem;padding:10px 4px}.flow-nav button>span{width:23px;height:23px}.focus-panel,.projector .focus-panel{padding:19px 16px}.focus-heading h2,.build-heading h2{font-size:1.4rem}.idea-cards{grid-template-columns:1fr;gap:12px}.idea-card{display:grid;grid-template-columns:80px 1fr;grid-template-rows:auto auto;gap:0 15px;text-align:left;padding:15px}.idea-picture{grid-row:1/3;grid-column:1;height:95px;font-size:1.2rem;flex-wrap:wrap;gap:0}.idea-picture img{height:80px;width:36px}.idea-picture>img:only-child{width:80px;height:95px}.idea-card h3{margin:4px 0 7px;align-self:end;font-size:1.07rem}.idea-card p{font-size:1rem}.mini-code{padding:5px;font-size:.85rem}.memory-line{padding:15px;gap:10px}.memory-line p{font-size:1rem}.flow-footer{display:grid;grid-template-columns:auto 1fr;gap:10px}.flow-footer>span{text-align:right;font-size:.8rem;grid-column:2;grid-row:1}.flow-footer>.primary{width:100%;grid-column:1/3;margin:0}.flow-footer #flowBack{grid-column:1;grid-row:1;font-size:.85rem;min-height:42px;padding:9px 12px}.flow-footer .button{font-size:.95rem}.flow-footer .primary{min-height:51px}.build-heading{align-items:start;flex-direction:column;gap:14px}.build-heading .button{width:100%}.task-track{gap:8px}.task-track button{width:32px;height:32px;font-size:.85rem}.task-address{grid-template-columns:1fr;gap:12px;padding:15px}.task-address span{gap:3px}.task-address b{font-size:.94rem}.task-address small{font-size:.65rem}.task-body,.task-body.has-blocks{display:block;padding:20px 16px}.task-instruction h3{font-size:1.45rem}.task-instruction>p{font-size:1.04rem}.task-blocks{padding:16px;margin-top:20px}.task-blocks .scratch-stack{font-size:.9rem}.task-blocks .sb{font-size:.86rem}.task-success{padding:16px;gap:10px}.task-success p{font-size:1rem}.capture-story{grid-template-columns:1fr auto 1fr;gap:10px}.capture-story>div{min-height:155px}.capture-story>.story-arrow:nth-of-type(2){display:none}.capture-story b{font-size:1rem}.capture-story small{font-size:.86rem}.static-team{gap:8px}.static-team>div{padding:12px 4px}.static-team img{width:70px;height:85px;max-width:100%}.static-team strong{font-size:.78rem}.address-result{gap:10px;flex-wrap:wrap;font-size:1rem}.matrix-reading{flex-direction:column;gap:18px}.matrix-reading>div:last-child{width:100%}.matrix-reading h3{font-size:1.3rem;line-height:1.6}.procedure-visual{grid-template-columns:1fr;gap:10px}.procedure-visual>div{padding:16px}.procedure-visual>.big-arrow{transform:rotate(90deg);text-align:center;font-size:1.3rem}.procedure-visual p{margin-top:4px}.visual-sway{height:65px}.concept-flow{gap:5px;margin:14px 0 24px}.concept-flow .flow-part strong{font-size:1rem}.concept-flow .flow-part small{font-size:.64rem}.project-parts{grid-template-columns:1fr;gap:10px}.project-parts .idea-card{padding:12px}.project-parts .idea-picture{height:75px;font-size:.95rem}.project-parts .idea-card p{font-size:.95rem}.coordinate-intro{grid-template-columns:1fr;gap:18px}.axis-poster{max-width:360px;width:100%;margin:auto;min-height:210px}.coordinate-rules{grid-template-columns:1fr 1fr;gap:14px}.coordinate-rules b{font-size:1rem}.coordinate-rules span{font-size:.95rem}.coordinate-play{grid-template-columns:1fr;gap:20px}.coordinate-dashboard{max-width:400px;width:100%;margin:auto}.coordinate-sprite{width:43px;height:53px}.coordinate-values>span{font-size:1rem}.coordinate-dashboard .demo-readout{font-size:1rem}.coordinate-pad{grid-template-rows:58px 58px;margin-top:10px}.coordinate-pad button{min-height:58px;padding:4px;font-size:1.3rem}.coordinate-pad small{font-size:.78rem}.coordinate-target{width:35px;height:35px;font-size:1.6rem}.space-layout{grid-template-columns:1fr;gap:12px}.space-diagram{max-width:360px;margin:auto}.space-layout h3{font-size:1.2rem}.space-values{font-size:1rem}.space-tabs .button{font-size:.8rem}.target-result p{font-size:1.05rem}.target-result{padding:18px}.trainer-tests,.checklist{padding:19px}.trainer-tests li,.checklist label{font-size:1rem}.projector .focus-panel p,.projector .task-instruction>p{font-size:1.08rem}.projector .task-instruction h3{font-size:1.55rem}.focus-panel .two-columns{grid-template-columns:1fr}.mission-time{font-size:.72rem}.lesson-flow{scroll-margin-top:85px}}
+
+/* ===== v5 · trilha com um único jogo que cresce ===== */
+kbd{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 7px;border:1px solid #b9c9bb;border-bottom-width:3px;border-radius:7px;background:#fff;color:var(--ink);font:700 .78rem/1 Consolas,'Courier New',monospace;white-space:nowrap}
+.nav-group{display:block;margin:16px 10px 4px;font-size:.62rem;font-weight:750;letter-spacing:.12em;color:#7a8b84}
+.mission-card .eyebrow{font-size:.62rem;margin-bottom:4px}
+.mission-card .card-num{font-size:.85rem}
+.card-keys{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.card-keys small{margin-left:auto}
+.mission-card .card-arrow{align-self:center;color:var(--green)}
+.home-block{padding:44px 0 6px}
+.home-block h2{font-size:1.85rem;margin:9px 0 14px}
+.home-block>p{color:var(--muted);max-width:820px}
+.goal-block{display:grid;grid-template-columns:1.1fr 1fr;gap:34px;align-items:center;padding:34px;margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.goal-block p{color:var(--muted)}
+.final-keys{display:grid;gap:8px}
+.final-keys>div{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:10px;background:var(--green-soft);font-size:.92rem;font-weight:600}
+.final-keys kbd{min-width:84px;height:34px;font-size:.9rem}
+.how-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:8px}
+.how-steps>div{position:relative;padding:22px 20px 20px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.how-steps b{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;font-size:.9rem;margin-bottom:12px}
+.how-steps h3{margin-bottom:6px}
+.how-steps p{font-size:.88rem;color:var(--muted)}
+.how-tips{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.how-tips p{margin:0;padding:14px 18px;border-radius:12px;background:#fff4dc;color:#5f461a;font-size:.9rem}
+.file-chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0 10px}
+.file-chain a{display:grid;padding:8px 12px;border:1px solid #c8d8c9;border-radius:9px;background:#fff;text-decoration:none;color:var(--ink);line-height:1.3}
+.file-chain a:hover{border-color:var(--green)}
+.file-chain b{font-family:Consolas,monospace;font-size:.82rem}
+.file-chain small{font-size:.68rem;color:var(--muted)}
+.file-chain>span{color:#8ba18d}
+.movement-link{margin-bottom:50px}
+.mission-prep{display:flex;align-items:stretch;gap:10px;margin-top:22px;flex-wrap:wrap}
+.mission-prep>div{flex:1;min-width:170px;padding:14px 16px;border-radius:12px;background:#fff;border:1px solid var(--line)}
+.mission-prep>div.prep-add{flex:1.6;background:var(--green-soft);border-color:#c8decc}
+.mission-prep small{display:block;font-size:.64rem;letter-spacing:.11em;font-weight:750;color:var(--muted);margin-bottom:6px}
+.mission-prep b{font-size:.92rem;line-height:1.9}
+.mission-prep>span{align-self:center;color:#8ba18d;font-size:1.2rem}
+.game-strip{margin-top:14px;padding:12px 14px;border:1px dashed #b7cbb9;border-radius:12px}
+.game-strip .eyebrow{font-size:.6rem;margin-bottom:8px}
+.game-keys{display:flex;flex-wrap:wrap;gap:8px}
+.game-key{display:inline-flex;align-items:center;gap:7px;padding:4px 10px 4px 4px;border-radius:8px;background:#eef2ec;font-size:.78rem;color:var(--muted)}
+.game-key.new{background:#fff4d2;color:#5f461a;font-weight:700;box-shadow:0 0 0 2px #edc960}
+.game-key.new::after{content:'NOVO';font-size:.55rem;letter-spacing:.1em;padding:2px 5px;border-radius:4px;background:#edc960;color:#4c3710}
+.game-empty{font-size:.78rem;color:var(--muted);align-self:center}
+.flow-nav button em{font-style:normal;display:grid;text-align:left;line-height:1.2;color:inherit}
+.flow-nav button em small{font-size:.68rem;font-weight:500;opacity:.8}
+.block-legend{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:0 0 18px}
+.block-legend .sb{padding:3px 9px;font-size:.7rem}
+.block-legend small{font-size:.72rem;color:var(--muted);margin-left:6px}
+.help-box{border-color:#ecc97a;background:#fffaf0}
+.help-box>summary{color:#6e4f12}
+.error-list{margin:0;display:grid;gap:12px}
+.error-list>div{padding:12px 14px;border-radius:10px;background:#fff;border:1px solid #f0e2c0}
+.error-list dt{font-weight:700;margin-bottom:4px}
+.error-list dt::before{content:'⚠ ';color:#b8860b}
+.error-list dd{margin:0;color:var(--muted);font-size:.92rem}
+.next-preview{margin-top:20px;padding:18px 22px;border-radius:12px;background:#eef3fb;border:1px solid #cddbf1}
+.next-preview p{margin:6px 0 0;font-size:.93rem}
+.next-preview.done{background:var(--green-soft);border-color:#c8decc}
+.pokemon-picker{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
+.pokemon-picker button{display:grid;justify-items:center;gap:4px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:#fafbf8;font-size:.72rem;font-weight:650}
+.pokemon-picker button img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
+.pokemon-picker button[aria-pressed=true]{border:2px solid var(--green);background:var(--green-soft);padding:7px 3px}
+.pick-result{margin-top:18px;padding:18px;border-radius:14px;background:var(--green-soft)}
+.pick-preview{display:flex;gap:18px;align-items:end}
+.pick-preview img{width:96px;height:96px;object-fit:contain;image-rendering:pixelated;background:#fff;border-radius:12px;padding:8px}
+.pick-result .demo-controls{margin-top:14px}
+.final-quiz{display:grid;gap:10px}
+.quiz-row{grid-template-columns:1fr 200px 110px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.quiz-row span{font-weight:600}
+.quiz-row output{font-size:.85rem;font-weight:700}
+.quiz-row output.ok{color:var(--green)}
+.quiz-row output.no{color:var(--red)}
+.editor-tour{margin-top:20px;padding:20px 24px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.editor-tour h3{font-size:1rem;margin-bottom:10px}
+.editor-tour ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:.92rem;color:var(--muted)}
+.editor-tour b{color:var(--ink)}
+.connection-flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}
+.connection-flow>span{padding:12px 16px;border-radius:12px;background:#fff;border:1px solid var(--line);font-weight:700;text-align:center;line-height:1.3}
+.connection-flow small{font-weight:500;color:var(--muted);font-size:.75rem}
+.connection-flow>b{font-family:Consolas,monospace;font-size:.85rem;color:#996500}
+@media(max-width:1180px){.how-steps{grid-template-columns:1fr 1fr}.goal-block{grid-template-columns:1fr}.pokemon-picker{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:850px){.nav-group{display:none}.mission-prep>span{display:none}.flow-nav button em small{display:none}}
+@media(max-width:600px){.how-steps,.how-tips{grid-template-columns:1fr}.goal-block{padding:20px}.quiz-row{grid-template-columns:1fr}.pick-preview img{width:72px;height:72px}.mission-prep>div{min-width:100%}}

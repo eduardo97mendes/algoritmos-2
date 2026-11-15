@@ -3,7 +3,10 @@
 const lessons = window.POKECODE_LESSONS;
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const storageKey = "pokecode-v4-progress";
+const storageKey = "pokecode-v5-progress";
+const gameKeys = window.POKECODE_GAME_KEYS || [];
+const pokemonList = ["pikachu","bulbasaur","charmander","charizard","squirtle","jigglypuff","meowth","psyduck","gengar","eevee","snorlax","dragonite","mewtwo","mew","chikorita","cyndaquil"];
+const cap = name => name[0].toUpperCase() + name.slice(1);
 let stored = {};
 try { stored = JSON.parse(localStorage.getItem(storageKey) || "{}"); } catch { stored = {}; }
 if (!stored || typeof stored !== "object" || Array.isArray(stored)) stored = {};
@@ -21,17 +24,26 @@ function isComplete(lesson) {
 }
 
 function renderNavigation() {
-  $("#missionNav").innerHTML = `<a class="nav-item ${currentId === "inicio" ? "active" : ""}" href="#inicio" ${currentId === "inicio" ? 'aria-current="page"' : ""}><span class="nav-index">⌂</span><span>Visão geral<small>Seu ponto de partida</small></span></a>` + lessons.map(lesson => `<a class="nav-item ${lesson.id === currentId ? "active" : ""} ${isComplete(lesson) ? "complete" : ""}" href="#${lesson.id}" ${lesson.id === currentId ? 'aria-current="page"' : ""}><span class="nav-index"><span>${lesson.number}</span></span><span>${lesson.label}<small>${lesson.topic}</small></span></a>`).join("");
-  $("#missionNav").insertAdjacentHTML("beforeend", '<a class="nav-item" href="imagens.html"><span class="nav-index" aria-hidden="true">↓</span><span>Imagens para o Scratch<small>Pokémon e Pokébolas</small></span></a>');
-  $("#missionNav").insertAdjacentHTML("beforeend", '<a class="nav-item" href="movimentos.html"><span class="nav-index" aria-hidden="true">↻</span><span>Movimentos e cenas<small>Fantasias e atores prontos</small></span></a>');
-  const total = lessons.filter(isComplete).length;
-  $("#progressText").textContent = `${total} de ${lessons.length} missões`;
+  const done = lessons.filter(isComplete).length;
+  $("#missionNav").innerHTML = `<a class="nav-item ${currentId === "inicio" ? "active" : ""}" href="#inicio" ${currentId === "inicio" ? 'aria-current="page"' : ""}><span class="nav-index">⌂</span><span>Comece aqui<small>Como funciona a trilha</small></span></a><span class="nav-group">SEU JOGO, MISSÃO A MISSÃO</span>` + lessons.map(lesson => `<a class="nav-item ${lesson.id === currentId ? "active" : ""} ${isComplete(lesson) ? "complete" : ""}" href="#${lesson.id}" ${lesson.id === currentId ? 'aria-current="page"' : ""}><span class="nav-index"><span>${lesson.number}</span></span><span>${lesson.label}<small>${lesson.topic}</small></span></a>`).join("") + '<span class="nav-group">MATERIAIS DE APOIO</span><a class="nav-item" href="imagens.html"><span class="nav-index" aria-hidden="true">↓</span><span>Imagens<small>PNG dos Pokémon e Pokébolas</small></span></a><a class="nav-item" href="movimentos.html"><span class="nav-index" aria-hidden="true">↻</span><span>Oficina de movimentos<small>Atores, cenários e extras</small></span></a>';
+  $("#progressText").textContent = `${done} de ${lessons.length} missões`;
   $("#courseProgress").max = lessons.length;
-  $("#courseProgress").value = total;
-  $("#courseProgress").textContent = `${total} de ${lessons.length}`;
+  $("#courseProgress").value = done;
+  $("#courseProgress").textContent = `${done} de ${lessons.length}`;
 }
 
-$("#missionCards").innerHTML = lessons.map(lesson => `<a class="mission-card" href="#${lesson.id}"><span class="card-num">${lesson.symbol}</span><div><h3>${lesson.number} · ${lesson.topic}</h3><p>${lesson.summary}</p><small>${lesson.time} · Ver missão</small></div><span class="card-arrow" aria-hidden="true">↗</span></a>`).join("");
+function keyChips(adds, current = false) {
+  return adds.map(item => `<span class="game-key ${current ? "new" : ""}"><kbd>${item.key}</kbd>${item.text}</span>`).join("");
+}
+
+function gameSoFar(index) {
+  const before = lessons.slice(0, index).flatMap(lesson => lesson.adds);
+  return `<div class="game-strip"><span class="eyebrow">SEU JOGO ATÉ AGORA</span><div class="game-keys">${before.length ? keyChips(before) : '<span class="game-empty">Ainda vazio: esta é a primeira peça.</span>'}${keyChips(lessons[index].adds, true)}</div></div>`;
+}
+
+$("#missionCards").innerHTML = lessons.map(lesson => `<a class="mission-card" href="#${lesson.id}"><span class="card-num">${lesson.number}</span><div><span class="eyebrow green">${lesson.topic}</span><h3>${lesson.label}</h3><p>${lesson.summary}</p><div class="card-keys">${lesson.adds.map(item => `<kbd>${item.key}</kbd>`).join("")}<small>${lesson.time}</small></div></div><span class="card-arrow" aria-hidden="true">→</span></a>`).join("");
+$("#fileChain").innerHTML = lessons.map((lesson, i) => `<a href="#${lesson.id}"><b>${lesson.file.save}</b><small>missão ${lesson.number}</small></a>${i < lessons.length - 1 ? '<span aria-hidden="true">→</span>' : ""}`).join("");
+$("#finalKeys").innerHTML = gameKeys.map(item => `<div><kbd>${item.key}</kbd><span>${item.text}</span></div>`).join("");
 
 function blockMarkup(blocks) {
   return blocks.map(([kind, text, inner]) => kind === "break" ? '<div style="height:20px" aria-hidden="true"></div>' : `<div class="sb ${kind} ${inner ? "loop" : ""}">${text}${inner ? `<div class="sb-inside">${blockMarkup(inner)}</div>` : ""}</div>`).join("");
@@ -43,13 +55,14 @@ function coordinateMarkup() {
 
 function demoMarkup(id) {
   if (id === "coordinates") return coordinateMarkup();
-  if (id === "upload") return `<div class="two-columns"><div><h3>As imagens já estão na mochila!</h3><p class="demo-instruction">Escolha entre 16 Pokémon e 4 Pokébolas. Baixe os PNGs e envie cada imagem como um ator separado.</p><div class="asset-preview"><img src="img/pokemon/pikachu.png" alt="Pikachu" width="100" height="100"><img src="img/pokemon/bulbasaur.png" alt="Bulbasaur" width="100" height="100"><img src="img/pokemon/squirtle.png" alt="Squirtle" width="100" height="100"><img class="pixel-art" src="img/pokebolas/pokebola.png" alt="Pokébola" width="72" height="72"></div><div class="demo-controls"><a class="button primary" href="imagens.html">Escolher e baixar imagens →</a><a class="button small" href="img/pacote-imagens.zip" download>Baixar pacote ZIP ↓</a></div></div><div><h3>Depois de baixar</h3><div class="ui-route"><span>Escolher um Ator</span> → <span>Enviar Ator ↑</span> → <span>Seu PNG</span></div><div class="scratch-stack"><div class="sb look">Fantasias → mudar a aparência</div><div class="sb event">Código → escolher quando começa</div><div class="sb motion">Código → programar o movimento</div></div><p class="block-caption">Se baixou o ZIP, extraia os arquivos primeiro. Os PNGs ficam nas pastas pokemon e pokebolas.</p></div></div>`;
-  if (id === "sequence") return `<div class="two-columns"><div><p class="demo-instruction">Use ↑ e ↓. A preparação vem primeiro. A mensagem de captura vem depois da animação.</p><ol class="order-list" id="orderList"></ol><button class="button small" id="checkOrder" type="button">Conferir sequência</button><p class="demo-readout" id="orderResult" aria-live="polite">Cinco etapas. Qual deve acontecer primeiro?</p></div><div><div class="demo-stage" id="captureStage"><span class="stage-name">SIMULAÇÃO DA CAPTURA</span><span class="pokeball capture-ball" id="captureBall" aria-hidden="true"></span><div class="wild-pokemon" id="wildPokemon"><span class="creature" aria-hidden="true">ϟ</span><small>Seu Pokémon</small></div><span class="stage-message" id="captureMessage" aria-live="polite">Pronto para lançar.</span></div><div class="demo-controls"><button class="button primary" id="playCapture" type="button">Ver a captura</button></div><p class="block-caption">Observe: 1 lançamento e 3 balanços. No Scratch, você cria essa animação com dois atores.</p></div></div>`;
-  if (id === "vector") return `<p class="demo-instruction">Cada nome ocupa uma posição. Clique em um item e compare o índice com o conteúdo.</p><div class="vector-demo" id="vectorDemo"></div><p class="demo-readout" id="vectorResult" aria-live="polite">Posição 1 → Pikachu. O índice começa em 1 no Scratch.</p><div class="demo-controls"><button class="button small" id="nextPokemon" type="button">Próximo da equipe →</button><button class="button small" id="addPokemon" type="button">Adicionar Eevee à lista</button></div>`;
+  if (id === "upload") return `<p class="demo-instruction"><strong>1.</strong> Clique no Pokémon que você quer. <strong>2.</strong> Baixe o ator dele e a Pokébola. Os dois arquivos <code>.sprite3</code> já vêm prontos, com fundo transparente e as fantasias certas.</p><div class="pokemon-picker" role="group" aria-label="Escolher Pokémon">${pokemonList.map((name, i) => `<button type="button" data-pick="${name}" aria-pressed="${i === 0}"><img src="img/pokemon/${name}.png" alt=""><span>${cap(name)}</span></button>`).join("")}</div><div class="pick-result"><div class="pick-preview"><img id="pickFront" src="img/pokemon/pikachu.png" alt="Frente"><img id="pickBack" src="img/pokemon/pikachu-costas.png" alt="Costas"><img src="img/movimentos/pokebola/fechada.svg" alt="Pokébola"></div><div class="demo-controls"><a class="button primary" id="pickDownload" href="img/movimentos/atores/pikachu.sprite3" download>① Baixar Pikachu (.sprite3) ↓</a><a class="button primary" href="img/movimentos/atores/pokebola-captura.sprite3" download>② Baixar Pokébola (.sprite3) ↓</a></div><p class="block-caption">Os arquivos vão para a pasta <strong>Downloads</strong>. Não precisa abrir: na etapa Monte você envia cada um pelo Scratch. Prefere PNG? Use a <a href="imagens.html">galeria de imagens</a>.</p></div>`;
+  if (id === "sequence") return `<div class="two-columns"><div><p class="demo-instruction">As etapas estão embaralhadas. Use ↑ e ↓ para colocar na ordem certa e clique em Conferir. Depois, veja a captura acontecer.</p><ol class="order-list" id="orderList"></ol><button class="button small" id="checkOrder" type="button">Conferir sequência</button><p class="demo-readout" id="orderResult" aria-live="polite">Cinco etapas. Qual deve acontecer primeiro?</p></div><div><div class="demo-stage" id="captureStage"><span class="stage-name">SIMULAÇÃO DA CAPTURA</span><span class="pokeball capture-ball" id="captureBall" aria-hidden="true"></span><div class="wild-pokemon" id="wildPokemon"><span class="creature" aria-hidden="true">ϟ</span><small>Seu Pokémon</small></div><span class="stage-message" id="captureMessage" aria-live="polite">Pronto para lançar.</span></div><div class="demo-controls"><button class="button primary" id="playCapture" type="button">Ver a captura</button></div><p class="block-caption">Observe: 1 lançamento e 3 balanços. No Scratch, você cria essa animação com dois atores.</p></div></div>`;
+  if (id === "vector") return `<p class="demo-instruction">Cada nome ocupa uma posição. Clique em um item e compare o índice com o conteúdo.</p><div class="vector-demo" id="vectorDemo"></div><p class="demo-readout" id="vectorResult" aria-live="polite">Posição 1 → Pikachu. O índice começa em 1 no Scratch.</p><div class="demo-controls"><button class="button small" id="nextPokemon" type="button">Tecla E · próximo →</button><button class="button small" id="addPokemon" type="button">Capturar Eevee (entra na lista)</button></div>`;
   if (id === "matrix") return `<p class="demo-instruction">Clique em uma célula. O mapa e a lista mostram os mesmos dados, organizados de formas diferentes.</p><div class="matrix-explorer"><div><div class="matrix-board" id="matrixBoard"></div><div class="map-legend"><span>0 · caminho</span><span>1 · árvore</span><span>2 · ginásio</span></div></div><div class="matrix-detail"><h3 id="matrixAddress">Linha 1 · coluna 1</h3><div class="formula" id="matrixFormula">((1 − 1) × 3) + 1 = 1</div><div class="flat-list" id="flatList" aria-label="Mapa guardado em uma lista"></div><p id="matrixResult" class="demo-readout" aria-live="polite">Índice 1 → valor 0 → caminho livre.</p></div></div>`;
   if (id === "procedure") return `<p class="demo-instruction">Escolha o valor do parâmetro. O procedimento executa a mesma sequência; só a quantidade muda.</p><div class="demo-stage"><span class="stage-name">PROCEDIMENTO BALANÇAR</span><span class="pokeball capture-ball" id="procedureBall" style="left:48%" aria-hidden="true"></span><span class="stage-message" id="procedureMessage" aria-live="polite">Defina o parâmetro e execute.</span></div><div class="demo-controls"><label class="field" for="shakeCount">Parâmetro vezes<select id="shakeCount"><option>1</option><option selected>3</option><option>5</option></select></label><button class="button primary" id="runProcedure" type="button">Chamar balançar (3)</button></div>`;
   if (id === "function") return `<p class="demo-instruction">Antes de alterar o número, tente prever: quantas capturas resultam em 40 XP?</p><div class="function-flow"><div class="flow-part"><small>ENTRADA · CAPTURAS</small><strong id="flowInput">3</strong></div><span class="flow-arrow" aria-hidden="true">→</span><div class="flow-part"><small>REGRA DO NOSSO JOGO</small><strong>× 10</strong></div><span class="flow-arrow" aria-hidden="true">→</span><div class="flow-part flow-result"><small>RESULTADO · XP</small><strong id="flowOutput">30</strong></div></div><div class="demo-controls"><label class="field" for="captureCount">Quantidade de capturas (0 a 6)<input id="captureCount" type="number" min="0" max="6" step="1" value="3"></label></div><p class="demo-readout" id="functionResult" aria-live="polite">3 capturas × 10 = 30 XP. No Scratch, guardaremos 30 em XP calculado.</p>`;
-  return `<p class="demo-instruction">Escolha a resposta antes de abrir a dica. Essa escolha ajuda você a explicar as partes do seu programa.</p><div id="finalQuiz"><label class="field" for="conceptChoice">Para guardar os nomes de vários Pokémon, eu uso:<select id="conceptChoice"><option value="">Escolha uma ideia</option><option value="procedimento">Procedimento</option><option value="vetor">Vetor / lista</option><option value="funcao">Função</option><option value="matriz">Matriz</option></select></label><p class="demo-readout" id="finalResult" aria-live="polite">Pense no endereço de cada nome dentro da equipe.</p></div>`;
+  const options = '<option value="">Escolha…</option><option value="vetor">Vetor / lista</option><option value="matriz">Matriz</option><option value="procedimento">Procedimento</option><option value="funcao">Função</option>';
+  return `<p class="demo-instruction">Para cada parte do jogo, escolha o conceito que resolve. Use o que você aprendeu nas missões.</p><div class="final-quiz">${[["equipe", "Guardar os nomes da equipe em ordem (tecla E)", "vetor"], ["mapa", "Saber o que existe na linha 3, coluna 3 (tecla M)", "matriz"], ["balanco", "Repetir a animação de balançar com um bloco só", "procedimento"], ["xp", "Receber as capturas e produzir o XP", "funcao"]].map(([key, text, answer]) => `<label class="field quiz-row" for="q-${key}"><span>${text}</span><select id="q-${key}" data-answer="${answer}">${options}</select><output id="r-${key}" aria-live="polite"></output></label>`).join("")}</div><p class="demo-readout" id="finalResult" aria-live="polite">0 de 4 certas.</p>`;
 }
 
 function showLesson(id, scroll = true) {
@@ -63,14 +76,17 @@ function showLesson(id, scroll = true) {
     flowStep = 0;
     buildStep = 0;
     document.title = `${lesson.topic} | PokéCode`;
-    $("#lessonView").innerHTML = `<header class="lesson-top guided-top"><div class="breadcrumb"><a href="#inicio">Missões</a><span aria-hidden="true">/</span><span>Missão ${lesson.number} de ${lessons.length}</span><span class="mission-time">${lesson.time}</span></div><div class="lesson-heading"><div><span class="eyebrow green">${lesson.topic}</span><h1>${lesson.title}</h1></div><span class="lesson-badge" aria-hidden="true">${lesson.symbol}</span></div><p class="lesson-lede">${lesson.lead}</p></header>
+    const next = lessons[index + 1];
+    $("#lessonView").innerHTML = `<header class="lesson-top guided-top"><div class="breadcrumb"><a href="#inicio">Início</a><span aria-hidden="true">/</span><span>Missão ${lesson.number} de ${lessons.length}</span><span class="mission-time">⏱ ${lesson.time}</span></div><div class="lesson-heading"><div><span class="eyebrow green">MISSÃO ${lesson.number} · ${lesson.topic.toUpperCase()}</span><h1>${lesson.title}</h1></div><span class="lesson-badge" aria-hidden="true">${lesson.symbol}</span></div><p class="lesson-lede">${lesson.lead}</p>
+      <div class="mission-prep"><div><small>1 · ABRA</small><b>${lesson.file.open}</b></div><span aria-hidden="true">→</span><div class="prep-add"><small>2 · ACRESCENTE</small><b>${lesson.adds.map(item => `<kbd>${item.key}</kbd> ${item.text}`).join("<br>")}</b></div><span aria-hidden="true">→</span><div><small>3 · SALVE COMO</small><b><code>${lesson.file.save}</code></b></div></div>
+      ${gameSoFar(index)}</header>
       <div class="lesson-flow" id="lessonFlow">
-        <nav class="flow-nav" aria-label="Etapas desta missão">${["Olhe", "Experimente", "Monte", "Teste"].map((label, i) => `<button type="button" data-flow="${i}" aria-current="${i === 0 ? "step" : "false"}"><span>${i + 1}</span>${label}</button>`).join("")}</nav>
-        <section class="focus-panel" data-panel="0" aria-labelledby="lookTitle"><div class="focus-heading"><span class="eyebrow green">1 · OLHE PARA A IDEIA</span><h2 id="lookTitle" tabindex="-1">${lesson.topic}</h2></div>${lesson.concept}</section>
-        <section class="focus-panel" data-panel="1" aria-labelledby="tryTitle" hidden><div class="focus-heading"><span class="eyebrow green">2 · TESTE AQUI PRIMEIRO</span><h2 id="tryTitle" tabindex="-1">${lesson.demoTitle}</h2></div><div class="focused-demo">${demoMarkup(lesson.demo)}</div><p class="demo-boundary">Esta é uma demonstração. Na próxima etapa, você cria a sua no Scratch.</p></section>
-        <section class="focus-panel" data-panel="2" aria-labelledby="buildTitle" hidden><div class="build-heading"><div><span class="eyebrow green">3 · SUA VEZ NO SCRATCH</span><h2 id="buildTitle" tabindex="-1">Um passo de cada vez.</h2></div><a class="button scratch-link" href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener noreferrer">Abrir Scratch ↗</a></div><div class="task-track" id="taskTrack" aria-label="Passos de montagem"></div><div id="taskCard"></div><details class="full-code"><summary>Ver a montagem completa dos blocos</summary><div class="details-body"><div class="script-columns">${lesson.scripts.map(group => `<div class="script-group"><h4>${group.name}</h4><div class="scratch-stack">${blockMarkup(group.blocks)}</div></div>`).join("")}</div><p class="block-caption">${lesson.scriptNote || "Os blocos desenhados são guias. No Scratch, encaixe os ovais de variáveis e parâmetros nos espaços correspondentes. Confira o ator selecionado."}</p></div></details>${["algoritmos","procedimento","projeto"].includes(id) ? '<details><summary>Quero acrescentar movimentos e cenários</summary><div class="details-body"><a href="movimentos.html" target="_blank" rel="noopener">Abrir oficina de movimentos ↗</a></div></details>' : ""}</section>
-        <section class="focus-panel" data-panel="3" aria-labelledby="testTitle" hidden><div class="focus-heading"><span class="eyebrow green">4 · COMPARE COM SEU PROJETO</span><h2 id="testTitle" tabindex="-1">Funcionou como você imaginou?</h2></div><div class="expected target-result"><h3>O resultado deve ser</h3><p>${lesson.expected}</p></div><div class="verify-grid"><div class="checklist"><h3>Testei no Scratch:</h3>${lesson.checks.map((check, i) => `<label><input type="checkbox" data-check="${lesson.id}-${i}" ${stored[`${lesson.id}-${i}`] === true ? "checked" : ""}><span>${check}</span></label>`).join("")}<p class="check-counter" id="checkCounter" role="status"></p></div><div class="trainer-tests"><h3>Mude e teste de novo</h3><ol>${lesson.tests.map(test => `<li>${test}</li>`).join("")}</ol><p class="one-note">Preveja o resultado antes de executar.</p></div></div><details class="think-question"><summary>Pergunta para explicar ao colega</summary><div class="details-body"><p><strong>${lesson.question}</strong></p><details><summary>Conferir a explicação</summary><div class="details-body">${lesson.answer}</div></details></div></details><details><summary>Terminei. Quero um desafio extra.</summary><div class="details-body">${lesson.extension}</div></details></section>
-        <div class="flow-footer"><button class="button" id="flowBack" type="button">← Voltar</button><span id="flowPosition" role="status"></span><button class="button primary" id="flowNext" type="button">Experimentar →</button><a class="button primary" id="nextMission" href="#${index === lessons.length - 1 ? "inicio" : lessons[index + 1].id}" hidden>${index === lessons.length - 1 ? "Ver minha jornada" : "Próxima missão"} →</a></div>
+        <nav class="flow-nav" aria-label="Etapas desta missão">${[["Olhe", "a ideia"], ["Experimente", "aqui na página"], ["Monte", "no Scratch"], ["Teste", "e confira"]].map(([label, hint], i) => `<button type="button" data-flow="${i}" aria-current="${i === 0 ? "step" : "false"}"><span>${i + 1}</span><em>${label}<small>${hint}</small></em></button>`).join("")}</nav>
+        <section class="focus-panel" data-panel="0" aria-labelledby="lookTitle"><div class="focus-heading"><span class="eyebrow green">1 · OLHE: ENTENDA A IDEIA ANTES DE MEXER</span><h2 id="lookTitle" tabindex="-1">${lesson.topic}</h2></div>${lesson.concept}</section>
+        <section class="focus-panel" data-panel="1" aria-labelledby="tryTitle" hidden><div class="focus-heading"><span class="eyebrow green">2 · EXPERIMENTE: BRINQUE AQUI NA PÁGINA</span><h2 id="tryTitle" tabindex="-1">${lesson.demoTitle}</h2></div><div class="focused-demo">${demoMarkup(lesson.demo)}</div><p class="demo-boundary">Isto é só uma simulação. Na próxima etapa, você monta de verdade no Scratch.</p></section>
+        <section class="focus-panel" data-panel="2" aria-labelledby="buildTitle" hidden><div class="build-heading"><div><span class="eyebrow green">3 · MONTE: SIGA UM PASSO DE CADA VEZ</span><h2 id="buildTitle" tabindex="-1">Faça cada passo e confira antes de avançar.</h2></div><a class="button scratch-link" href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener noreferrer">Abrir Scratch ↗</a></div><div class="block-legend" aria-label="Cores das categorias de blocos"><span class="sb event">Eventos</span><span class="sb motion">Movimento</span><span class="sb look">Aparência</span><span class="sb control">Controle</span><span class="sb sense">Sensores</span><span class="sb op">Operadores</span><span class="sb data">Variáveis</span><span class="sb custom">Meus Blocos</span><small>A cor do bloco mostra em qual categoria procurar.</small></div><div class="task-track" id="taskTrack" aria-label="Passos de montagem"></div><div id="taskCard"></div><details class="help-box"><summary>🆘 Travou? Veja os erros mais comuns desta missão</summary><div class="details-body"><dl class="error-list">${lesson.errors.map(([problem, fix]) => `<div><dt>${problem}</dt><dd>${fix}</dd></div>`).join("")}</dl><p class="one-note">Ainda não deu? Compare com a montagem completa abaixo ou chame o colega de dupla antes do professor.</p></div></details><details class="full-code"><summary>Ver a montagem completa desta missão</summary><div class="details-body"><div class="script-columns">${lesson.scripts.map(group => `<div class="script-group"><h4>${group.name}</h4><div class="scratch-stack">${blockMarkup(group.blocks)}</div></div>`).join("")}</div><p class="block-caption">${lesson.scriptNote || "Os blocos desenhados são um guia. ( ) é um espaço para número ou oval; [ ▾ ] é um menu para escolher; &lt; &gt; é uma condição. Confira sempre qual ator está selecionado."}</p></div></details></section>
+        <section class="focus-panel" data-panel="3" aria-labelledby="testTitle" hidden><div class="focus-heading"><span class="eyebrow green">4 · TESTE: COMPARE COM O SEU PROJETO</span><h2 id="testTitle" tabindex="-1">Funcionou como você imaginou?</h2></div><div class="expected target-result"><h3>O resultado deve ser</h3><p>${lesson.expected}</p></div><div class="verify-grid"><div class="checklist"><h3>Marque o que já funciona:</h3>${lesson.checks.map((check, i) => `<label><input type="checkbox" data-check="${lesson.id}-${i}" ${stored[`${lesson.id}-${i}`] === true ? "checked" : ""}><span>${check}</span></label>`).join("")}<p class="check-counter" id="checkCounter" role="status"></p></div><div class="trainer-tests"><h3>Mude e teste de novo</h3><ol>${lesson.tests.map(test => `<li>${test}</li>`).join("")}</ol><p class="one-note">Diga o que vai acontecer <strong>antes</strong> de executar.</p></div></div><details class="think-question"><summary>💬 Pergunta para explicar ao colega</summary><div class="details-body"><p><strong>${lesson.question}</strong></p><details><summary>Conferir a explicação</summary><div class="details-body">${lesson.answer}</div></details></div></details><details><summary>⭐ Terminei antes. Quero um desafio extra.</summary><div class="details-body">${lesson.extension}</div></details>${next ? `<div class="next-preview"><span class="eyebrow">NA PRÓXIMA MISSÃO</span><p><b>${next.label}:</b> ${next.summary} Você vai abrir o <code>${lesson.file.save}</code> e continuar dele.</p></div>` : '<div class="next-preview done"><span class="eyebrow">TRILHA COMPLETA</span><p><b>Parabéns!</b> Seu jogo usa algoritmo, repetição, vetor, matriz, procedimento e função.</p></div>'}</section>
+        <div class="flow-footer"><button class="button" id="flowBack" type="button">← Voltar</button><span id="flowPosition" role="status"></span><button class="button primary" id="flowNext" type="button">Experimentar →</button><a class="button primary" id="nextMission" href="#${next ? next.id : "inicio"}" hidden>${next ? `Ir para a missão ${next.number} →` : "Voltar ao início"}</a></div>
       </div>`;
     renderTask(lesson);
     $$('[data-flow]').forEach(button => button.addEventListener("click", () => setFlow(Number(button.dataset.flow), lesson)));
@@ -114,10 +130,16 @@ function scrollToFlow(element) {
   window.scrollTo({top, behavior:"instant"});
 }
 
+const taskVisuals = {
+  upload: `<div class="editor-map" role="img" aria-label="Esquema do editor: código à esquerda, palco à direita e botão de enviar ator abaixo do palco"><span class="editor-map-label">ESQUEMA DO EDITOR</span><div class="editor-code"><b>Código</b><span class="sb event">quando ⚑ for clicado</span><span class="sb look">diga Olá!</span></div><div class="editor-stage"><img src="img/pokemon/pikachu.png" alt=""></div><div class="editor-upload"><b>Escolher um Ator</b><span>↑ Enviar Ator</span></div></div>`,
+  costume: `<div class="costume-visual"><div><img src="img/pokemon/pikachu.png" alt=""><b>frente</b></div><span aria-hidden="true">↔</span><div><img src="img/pokemon/pikachu-costas.png" alt=""><b>costas</b></div><p>Duas fantasias do mesmo ator</p></div>`
+};
+
 function renderTask(lesson) {
   const task = lesson.plan[buildStep];
+  const visual = taskVisuals[task.visual] || task.visual;
   $("#taskTrack").innerHTML = lesson.plan.map((item, i) => `<button type="button" data-task="${i}" aria-label="Passo ${i + 1}: ${item.title}" aria-current="${i === buildStep ? "step" : "false"}">${i + 1}</button>`).join("");
-  $("#taskCard").innerHTML = `<article class="task-card"><div class="task-address"><span><small>SELECIONE</small><b>${task.actor}</b></span><span><small>PROCURE EM</small><b>${task.where}</b></span></div><div class="task-body ${task.blocks.length || task.visual ? "has-blocks" : ""}"><div class="task-instruction"><span class="task-count">PASSO ${buildStep + 1} DE ${lesson.plan.length}</span><h3 id="taskTitle" tabindex="-1">${task.title}</h3><p>${task.instruction}</p>${task.tip ? `<details><summary>Preciso de uma dica</summary><div class="details-body">${task.tip}</div></details>` : ""}</div>${task.blocks.length ? `<div class="task-blocks"><span class="eyebrow">MONTE ASSIM</span><div class="scratch-stack">${blockMarkup(task.blocks)}</div></div>` : task.visual ? `<div class="task-visual">${task.visual}</div>` : ""}</div><div class="task-success"><span aria-hidden="true">✓</span><div><b>Confira antes de avançar</b><p>${task.success}</p></div></div></article>`;
+  $("#taskCard").innerHTML = `<article class="task-card"><div class="task-address"><span><small>SELECIONE</small><b>${task.actor}</b></span><span><small>PROCURE EM</small><b>${task.where}</b></span></div><div class="task-body ${task.blocks.length || visual ? "has-blocks" : ""}"><div class="task-instruction"><span class="task-count">PASSO ${buildStep + 1} DE ${lesson.plan.length}</span><h3 id="taskTitle" tabindex="-1">${task.title}</h3><p>${task.instruction}</p>${task.tip ? `<details><summary>Preciso de uma dica</summary><div class="details-body">${task.tip}</div></details>` : ""}</div>${task.blocks.length ? `<div class="task-blocks"><span class="eyebrow">MONTE ASSIM</span><div class="scratch-stack">${blockMarkup(task.blocks)}</div></div>` : visual ? `<div class="task-visual">${visual}</div>` : ""}</div><div class="task-success"><span aria-hidden="true">✓</span><div><b>Funcionou? Então avance.</b><p>${task.success}</p></div></div></article>`;
   $$('[data-task]').forEach(button => button.addEventListener("click", () => {buildStep = Number(button.dataset.task); renderTask(lesson); focusTask();}));
   updateFlow(lesson);
 }
@@ -136,7 +158,7 @@ function updateFlow(lesson) {
   $("#flowNext").hidden = flowStep === 3;
   $("#nextMission").hidden = flowStep !== 3;
   $("#flowPosition").textContent = flowStep === 2 ? `Montagem · ${buildStep + 1}/${lesson.plan.length}` : `Etapa ${flowStep + 1} de 4`;
-  $("#flowNext").textContent = ["Entendi. Quero experimentar →", "Agora vou montar no Scratch →", buildStep === lesson.plan.length - 1 ? "Montagem pronta. Vou testar →" : "Fiz. Próximo passo →"][flowStep] || "";
+  $("#flowNext").textContent = ["Entendi. Quero experimentar →", "Agora vou montar no Scratch →", buildStep === lesson.plan.length - 1 ? "Montei tudo. Vou testar →" : `Fiz o passo ${buildStep + 1}. Próximo →`][flowStep] || "";
 }
 
 function updateCounter(lesson) {
@@ -198,7 +220,7 @@ function setupDemo(type, token) {
   }
   if (type === "sequence") {
     $("#wildPokemon .creature").outerHTML = '<img src="img/pokemon/pikachu.png" alt="Pikachu">';
-    const correct = ["Preparar os dois atores", "Lançar a Pokébola uma vez", "Balançar a Pokébola 3 vezes", "Transmitir a mensagem capturado", "Pokémon recebe a mensagem e se esconde"];
+    const correct = ["Pokébola vai para o ponto de partida", "Deslizar até o Pokémon (uma vez)", "Balançar 3 vezes", "Transmitir a mensagem capturado", "Pokémon diz “Fui capturado!” e reaparece"];
     const order = [3, 1, 4, 0, 2];
     const renderOrder = () => {
       $("#orderList").innerHTML = order.map((item, i) => `<li><span class="order-text">${correct[item]}</span><span class="order-arrows"><button type="button" data-index="${i}" data-shift="-1" aria-label="Mover etapa ${i + 1} para cima" ${i === 0 ? "disabled" : ""}>↑</button><button type="button" data-index="${i}" data-shift="1" aria-label="Mover etapa ${i + 1} para baixo" ${i === order.length - 1 ? "disabled" : ""}>↓</button></span></li>`).join("");
@@ -234,7 +256,7 @@ function setupDemo(type, token) {
       await pause(650);
       await shake(ball, 3, message, token);
       if (viewVersion !== token) return;
-      message.textContent = "Mensagem capturado → Pokémon se esconde.";
+      message.textContent = "Mensagem capturado → “Fui capturado!”";
       pokemon.style.opacity = "0";
       button.disabled = false;
     });
@@ -251,7 +273,7 @@ function setupDemo(type, token) {
     $("#addPokemon").addEventListener("click", event => {
       team.push({name:"Eevee",symbol:"✦",kind:"leaf"}); selected = team.length - 1; renderTeam();
       event.currentTarget.disabled = true;
-      event.currentTarget.textContent = "Eevee adicionado · índice 4";
+      event.currentTarget.textContent = "Eevee capturado · índice 4";
     });
     renderTeam();
   }
@@ -306,10 +328,24 @@ function setupDemo(type, token) {
     });
   }
   if (type === "final") {
-    $("#conceptChoice").addEventListener("change", event => {
-      const messages = {vetor:"Isso! Uma lista guarda os nomes em posições numeradas. A matriz cuida do mapa; os blocos personalizados organizam ações e cálculos.",procedimento:"Um procedimento executa uma tarefa. Para guardar vários nomes em ordem, pense em uma lista.",funcao:"Uma função produz um resultado. Para guardar a equipe inteira, precisamos de uma estrutura de dados.",matriz:"A matriz representa o mapa com linhas e colunas. Para uma sequência de nomes, basta uma lista."};
-      $("#finalResult").textContent = messages[event.target.value] || "Pense no endereço de cada nome dentro da equipe.";
-    });
+    const selects = $$("[data-answer]");
+    selects.forEach(select => select.addEventListener("change", () => {
+      const out = select.parentElement.querySelector("output");
+      out.textContent = !select.value ? "" : select.value === select.dataset.answer ? "✓ Isso!" : "✗ Tente outro";
+      out.className = select.value === select.dataset.answer ? "ok" : "no";
+      const right = selects.filter(item => item.value === item.dataset.answer).length;
+      $("#finalResult").textContent = right === selects.length ? "4 de 4! Você sabe onde cada conceito vive no seu jogo. Agora monte a ligação final." : `${right} de 4 certas.`;
+    }));
+  }
+  if (type === "upload") {
+    $$("[data-pick]").forEach(button => button.addEventListener("click", () => {
+      const name = button.dataset.pick;
+      $$("[data-pick]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      $("#pickFront").src = `img/pokemon/${name}.png`;
+      $("#pickBack").src = `img/pokemon/${name}-costas.png`;
+      $("#pickDownload").href = `img/movimentos/atores/${name}.sprite3`;
+      $("#pickDownload").textContent = `① Baixar ${cap(name)} (.sprite3) ↓`;
+    }));
   }
 }
 
@@ -327,7 +363,7 @@ function route(initial = false) {
     $("#conteudo").focus();
     return;
   }
-  const legacy = {top:"inicio",ideia:"algoritmos",ordene:"algoritmos",scratch:"algoritmos",praticas:"vetor",dados:"matriz",blocos:"procedimento",missao:"projeto","pokemon-upload":"preparar"};
+  const legacy = {"coordenadas-x-y":"coordenadas",top:"inicio",ideia:"algoritmos",ordene:"algoritmos",scratch:"algoritmos",praticas:"vetor",dados:"matriz",blocos:"procedimento",missao:"projeto","pokemon-upload":"preparar"};
   showLesson(legacy[id] || id || "inicio", !initial);
 }
 window.addEventListener("hashchange", () => route());
