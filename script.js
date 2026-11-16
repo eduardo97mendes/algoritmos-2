@@ -14,6 +14,7 @@ let currentId = "inicio";
 let viewVersion = 0;
 let flowStep = 0;
 let buildStep = 0;
+let buildMode = (() => { try { return localStorage.getItem("pokecode-build-mode") || "watch"; } catch (e) { return "watch"; } })();
 
 function save() {
   try { localStorage.setItem(storageKey, JSON.stringify(stored)); } catch { /* Modo privado: a sessão continua funcionando. */ }
@@ -72,30 +73,34 @@ function showLesson(id, scroll = true) {
   $("#homeView").hidden = Boolean(lesson);
   $("#lessonView").hidden = !lesson;
   if (lesson) {
+    if (window.PokeLab) window.PokeLab.unmount();
     const index = lessons.indexOf(lesson);
     flowStep = 0;
     buildStep = 0;
     document.title = `${lesson.topic} | PokéCode`;
     const next = lessons[index + 1];
     $("#lessonView").innerHTML = `<header class="lesson-top guided-top"><div class="breadcrumb"><a href="#inicio">Início</a><span aria-hidden="true">/</span><span>Missão ${lesson.number} de ${lessons.length}</span><span class="mission-time">⏱ ${lesson.time}</span></div><div class="lesson-heading"><div><span class="eyebrow green">MISSÃO ${lesson.number} · ${lesson.topic.toUpperCase()}</span><h1>${lesson.title}</h1></div><span class="lesson-badge" aria-hidden="true">${lesson.symbol}</span></div><p class="lesson-lede">${lesson.lead}</p>
-      <div class="mission-prep"><div><small>1 · ABRA</small><b>${lesson.file.open}</b></div><span aria-hidden="true">→</span><div class="prep-add"><small>2 · ACRESCENTE</small><b>${lesson.adds.map(item => `<kbd>${item.key}</kbd> ${item.text}`).join("<br>")}</b></div><span aria-hidden="true">→</span><div><small>3 · SALVE COMO</small><b><code>${lesson.file.save}</code></b></div></div>
+      <div class="mission-prep"><div><small>1 · ABRA <em>(no Scratch)</em></small><b>${lesson.file.open}</b></div><span aria-hidden="true">→</span><div class="prep-add"><small>2 · ACRESCENTE</small><b>${lesson.adds.map(item => `<kbd>${item.key}</kbd> ${item.text}`).join("<br>")}</b></div><span aria-hidden="true">→</span><div><small>3 · SALVE COMO <em>(no site é automático)</em></small><b><code>${lesson.file.save}</code></b></div></div>
       ${gameSoFar(index)}</header>
       <div class="lesson-flow" id="lessonFlow">
-        <nav class="flow-nav" aria-label="Etapas desta missão">${[["Olhe", "a ideia"], ["Experimente", "aqui na página"], ["Monte", "no Scratch"], ["Teste", "e confira"]].map(([label, hint], i) => `<button type="button" data-flow="${i}" aria-current="${i === 0 ? "step" : "false"}"><span>${i + 1}</span><em>${label}<small>${hint}</small></em></button>`).join("")}</nav>
+        <nav class="flow-nav" aria-label="Etapas desta missão">${[["Olhe", "a ideia"], ["Experimente", "aqui na página"], ["Monte", "assista e faça"], ["Teste", "e confira"]].map(([label, hint], i) => `<button type="button" data-flow="${i}" aria-current="${i === 0 ? "step" : "false"}"><span>${i + 1}</span><em>${label}<small>${hint}</small></em></button>`).join("")}</nav>
         <section class="focus-panel" data-panel="0" aria-labelledby="lookTitle"><div class="focus-heading"><span class="eyebrow green">1 · OLHE: ENTENDA A IDEIA ANTES DE MEXER</span><h2 id="lookTitle" tabindex="-1">${lesson.topic}</h2></div>${lesson.concept}</section>
-        <section class="focus-panel" data-panel="1" aria-labelledby="tryTitle" hidden><div class="focus-heading"><span class="eyebrow green">2 · EXPERIMENTE: BRINQUE AQUI NA PÁGINA</span><h2 id="tryTitle" tabindex="-1">${lesson.demoTitle}</h2></div><div class="focused-demo">${demoMarkup(lesson.demo)}</div><p class="demo-boundary">Isto é só uma simulação. Na próxima etapa, você monta de verdade no Scratch.</p></section>
-        <section class="focus-panel" data-panel="2" aria-labelledby="buildTitle" hidden><div class="build-heading"><div><span class="eyebrow green">3 · MONTE: SIGA UM PASSO DE CADA VEZ</span><h2 id="buildTitle" tabindex="-1">Faça cada passo e confira antes de avançar.</h2></div><a class="button scratch-link" href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener noreferrer">Abrir Scratch ↗</a></div><div class="block-legend" aria-label="Cores das categorias de blocos"><span class="sb event">Eventos</span><span class="sb motion">Movimento</span><span class="sb look">Aparência</span><span class="sb control">Controle</span><span class="sb sense">Sensores</span><span class="sb op">Operadores</span><span class="sb data">Variáveis</span><span class="sb custom">Meus Blocos</span><small>A cor do bloco mostra em qual categoria procurar.</small></div><div class="task-track" id="taskTrack" aria-label="Passos de montagem"></div><div id="taskCard"></div><details class="help-box"><summary>🆘 Travou? Veja os erros mais comuns desta missão</summary><div class="details-body"><dl class="error-list">${lesson.errors.map(([problem, fix]) => `<div><dt>${problem}</dt><dd>${fix}</dd></div>`).join("")}</dl><p class="one-note">Ainda não deu? Compare com a montagem completa abaixo ou chame o colega de dupla antes do professor.</p></div></details><details class="full-code"><summary>Ver a montagem completa desta missão</summary><div class="details-body"><div class="script-columns">${lesson.scripts.map(group => `<div class="script-group"><h4>${group.name}</h4><div class="scratch-stack">${blockMarkup(group.blocks)}</div></div>`).join("")}</div><p class="block-caption">${lesson.scriptNote || "Os blocos desenhados são um guia. ( ) é um espaço para número ou oval; [ ▾ ] é um menu para escolher; &lt; &gt; é uma condição. Confira sempre qual ator está selecionado."}</p></div></details></section>
+        <section class="focus-panel" data-panel="1" aria-labelledby="tryTitle" hidden><div class="focus-heading"><span class="eyebrow green">2 · EXPERIMENTE: BRINQUE AQUI NA PÁGINA</span><h2 id="tryTitle" tabindex="-1">${lesson.demoTitle}</h2></div><div class="focused-demo">${demoMarkup(lesson.demo)}</div><p class="demo-boundary">Isto é só um aquecimento. Na próxima etapa você assiste à explicação completa e monta o código de verdade.</p></section>
+        <section class="focus-panel" data-panel="2" aria-labelledby="buildTitle" hidden><div class="build-heading"><div><span class="eyebrow green">3 · MONTE: ASSISTA E DEPOIS FAÇA VOCÊ</span><h2 id="buildTitle" tabindex="-1">Como você quer montar?</h2></div></div><div class="build-modes" role="tablist" aria-label="Forma de montar"><button type="button" role="tab" data-mode="watch"><b>▶ 1. Assistir à explicação</b><small>O código pronto roda devagar, bloco por bloco</small></button><button type="button" role="tab" data-mode="site"><b>✋ 2. Montar aqui no site</b><small>Editor de blocos com palco e metas automáticas</small></button><button type="button" role="tab" data-mode="scratch"><b>🐱 Montar no Scratch</b><small>Passo a passo no scratch.mit.edu</small></button></div><div class="lab-host" id="labHost"></div><div id="scratchMode"><div class="scratch-mode-head"><p>Siga um passo por vez no Scratch. Ao terminar, salve o arquivo indicado no topo da missão.</p><a class="button scratch-link" href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener noreferrer">Abrir Scratch ↗</a></div><div class="block-legend" aria-label="Cores das categorias de blocos"><span class="sb event">Eventos</span><span class="sb motion">Movimento</span><span class="sb look">Aparência</span><span class="sb control">Controle</span><span class="sb sense">Sensores</span><span class="sb op">Operadores</span><span class="sb data">Variáveis</span><span class="sb custom">Meus Blocos</span><small>A cor do bloco mostra em qual categoria procurar.</small></div><div class="task-track" id="taskTrack" aria-label="Passos de montagem"></div><div id="taskCard"></div><details class="help-box"><summary>🆘 Travou? Veja os erros mais comuns desta missão</summary><div class="details-body"><dl class="error-list">${lesson.errors.map(([problem, fix]) => `<div><dt>${problem}</dt><dd>${fix}</dd></div>`).join("")}</dl><p class="one-note">Ainda não deu? Compare com a montagem completa abaixo ou chame o colega de dupla antes do professor.</p></div></details><details class="full-code"><summary>Ver a montagem completa desta missão</summary><div class="details-body"><div class="script-columns">${lesson.scripts.map(group => `<div class="script-group"><h4>${group.name}</h4><div class="scratch-stack">${blockMarkup(group.blocks)}</div></div>`).join("")}</div><p class="block-caption">${lesson.scriptNote || "Os blocos desenhados são um guia. ( ) é um espaço para número ou oval; [ ▾ ] é um menu para escolher; &lt; &gt; é uma condição. Confira sempre qual ator está selecionado."}</p></div></details></div></section>
         <section class="focus-panel" data-panel="3" aria-labelledby="testTitle" hidden><div class="focus-heading"><span class="eyebrow green">4 · TESTE: COMPARE COM O SEU PROJETO</span><h2 id="testTitle" tabindex="-1">Funcionou como você imaginou?</h2></div><div class="expected target-result"><h3>O resultado deve ser</h3><p>${lesson.expected}</p></div><div class="verify-grid"><div class="checklist"><h3>Marque o que já funciona:</h3>${lesson.checks.map((check, i) => `<label><input type="checkbox" data-check="${lesson.id}-${i}" ${stored[`${lesson.id}-${i}`] === true ? "checked" : ""}><span>${check}</span></label>`).join("")}<p class="check-counter" id="checkCounter" role="status"></p></div><div class="trainer-tests"><h3>Mude e teste de novo</h3><ol>${lesson.tests.map(test => `<li>${test}</li>`).join("")}</ol><p class="one-note">Diga o que vai acontecer <strong>antes</strong> de executar.</p></div></div><details class="think-question"><summary>💬 Pergunta para explicar ao colega</summary><div class="details-body"><p><strong>${lesson.question}</strong></p><details><summary>Conferir a explicação</summary><div class="details-body">${lesson.answer}</div></details></div></details><details><summary>⭐ Terminei antes. Quero um desafio extra.</summary><div class="details-body">${lesson.extension}</div></details>${next ? `<div class="next-preview"><span class="eyebrow">NA PRÓXIMA MISSÃO</span><p><b>${next.label}:</b> ${next.summary} Você vai abrir o <code>${lesson.file.save}</code> e continuar dele.</p></div>` : '<div class="next-preview done"><span class="eyebrow">TRILHA COMPLETA</span><p><b>Parabéns!</b> Seu jogo usa algoritmo, repetição, vetor, matriz, procedimento e função.</p></div>'}</section>
         <div class="flow-footer"><button class="button" id="flowBack" type="button">← Voltar</button><span id="flowPosition" role="status"></span><button class="button primary" id="flowNext" type="button">Experimentar →</button><a class="button primary" id="nextMission" href="#${next ? next.id : "inicio"}" hidden>${next ? `Ir para a missão ${next.number} →` : "Voltar ao início"}</a></div>
       </div>`;
     renderTask(lesson);
+    mountedLab = "";
+    $$("[data-mode]").forEach(button => button.addEventListener("click", () => setBuildMode(button.dataset.mode, lesson)));
     $$('[data-flow]').forEach(button => button.addEventListener("click", () => setFlow(Number(button.dataset.flow), lesson)));
     $("#flowBack").addEventListener("click", () => {
-      if (flowStep === 2 && buildStep > 0) { buildStep -= 1; renderTask(lesson); focusTask(); }
+      if (flowStep === 2 && buildMode === "scratch" && buildStep > 0) { buildStep -= 1; renderTask(lesson); focusTask(); }
       else setFlow(flowStep - 1, lesson);
     });
     $("#flowNext").addEventListener("click", () => {
-      if (flowStep === 2 && buildStep < lesson.plan.length - 1) { buildStep += 1; renderTask(lesson); focusTask(); }
+      if (flowStep === 2 && buildMode === "watch") { setBuildMode("site", lesson); }
+      else if (flowStep === 2 && buildMode === "scratch" && buildStep < lesson.plan.length - 1) { buildStep += 1; renderTask(lesson); focusTask(); }
       else setFlow(flowStep + 1, lesson);
     });
     updateFlow(lesson);
@@ -109,6 +114,8 @@ function showLesson(id, scroll = true) {
     updateCounter(lesson);
   } else {
     document.title = "PokéCode — Laboratório de algoritmos";
+    if (window.PokeLab) window.PokeLab.unmount();
+    mountedLab = "";
     $("#lessonView").innerHTML = "";
   }
   renderNavigation();
@@ -157,8 +164,32 @@ function updateFlow(lesson) {
   $("#flowBack").hidden = flowStep === 0;
   $("#flowNext").hidden = flowStep === 3;
   $("#nextMission").hidden = flowStep !== 3;
-  $("#flowPosition").textContent = flowStep === 2 ? `Montagem · ${buildStep + 1}/${lesson.plan.length}` : `Etapa ${flowStep + 1} de 4`;
-  $("#flowNext").textContent = ["Entendi. Quero experimentar →", "Agora vou montar no Scratch →", buildStep === lesson.plan.length - 1 ? "Montei tudo. Vou testar →" : `Fiz o passo ${buildStep + 1}. Próximo →`][flowStep] || "";
+  $("#flowPosition").textContent = flowStep === 2 && buildMode === "scratch" ? `Montagem · ${buildStep + 1}/${lesson.plan.length}` : `Etapa ${flowStep + 1} de 4`;
+  const buildLabel = buildMode === "watch" ? "Entendi. Vou montar no site →" : buildMode === "site" ? "Montei. Vou testar →" : buildStep === lesson.plan.length - 1 ? "Montei tudo. Vou testar →" : `Fiz o passo ${buildStep + 1}. Próximo →`;
+  $("#flowNext").textContent = ["Entendi. Quero experimentar →", "Agora vou montar →", buildLabel][flowStep] || "";
+  syncBuild(lesson);
+}
+
+function setBuildMode(mode, lesson) {
+  buildMode = mode;
+  try { localStorage.setItem("pokecode-build-mode", mode); } catch (e) { /* sem armazenamento */ }
+  updateFlow(lesson);
+  $("#labHost").scrollIntoView({block: "nearest"});
+}
+
+let mountedLab = "";
+function syncBuild(lesson) {
+  const host = $("#labHost");
+  if (!host) return;
+  $$("[data-mode]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.mode === buildMode)));
+  $("#scratchMode").hidden = buildMode !== "scratch";
+  host.hidden = buildMode === "scratch";
+  const want = flowStep === 2 && buildMode !== "scratch" ? `${lesson.id}:${buildMode}` : "";
+  if (want === mountedLab) return;
+  mountedLab = want;
+  if (!window.PokeLab) return;
+  if (!want) { window.PokeLab.unmount(); host.innerHTML = ""; return; }
+  window.PokeLab.mount(host, {level: lessons.indexOf(lesson), mode: buildMode === "watch" ? "watch" : "build", lesson});
 }
 
 function updateCounter(lesson) {
@@ -344,6 +375,7 @@ function setupDemo(type, token) {
       $("#pickFront").src = `img/pokemon/${name}.png`;
       $("#pickBack").src = `img/pokemon/${name}-costas.png`;
       $("#pickDownload").href = `img/movimentos/atores/${name}.sprite3`;
+      if (window.PokeLab) window.PokeLab.setPokemon(name);
       $("#pickDownload").textContent = `① Baixar ${cap(name)} (.sprite3) ↓`;
     }));
   }

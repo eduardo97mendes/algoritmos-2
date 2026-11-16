@@ -63,7 +63,7 @@
         task("Salve seu jogo", "Projeto inteiro", "Arquivo → Baixar para o seu computador", 'No menu <strong>Arquivo</strong>, escolha <strong>Baixar para o seu computador</strong>. Salve com o nome <code>aventura-1.sb3</code>.', [], "O arquivo aventura-1.sb3 está na pasta Downloads (ou na pasta indicada pelo professor).", "Na próxima aula, abra com Arquivo → Carregar do seu computador.")
       ],
       scripts: [{name: "Pokemon", blocks: pokemonFlag}, {name: "Pokebola", blocks: pokeballFlag}],
-      checks: ["Apaguei o gato e enviei meu Pokémon.", "O ator se chama Pokemon e tem duas fantasias.", "A Pokebola é um ator separado.", "Ao clicar na bandeira, o Pokémon aparece à direita e fala.", "Salvei como aventura-1.sb3."],
+      checks: ["Apaguei o gato e enviei meu Pokémon.", "O ator se chama Pokemon e tem duas fantasias.", "A Pokebola é um ator separado.", "Ao clicar na bandeira, o Pokémon aparece à direita e fala.", "Salvei como aventura-1.sb3 (no site, o jogo é salvo sozinho)."],
       expected: "Ao clicar na bandeira, a Pokébola fica à esquerda e o Pokémon fica à direita, dizendo “Um Pokémon selvagem apareceu!”.",
       tests: ["Arraste o Pokémon com o mouse para outro lugar e clique na bandeira: ele precisa voltar para a direita.", "Clique na Pokebola na lista de atores: os blocos do Pokémon NÃO aparecem nela."],
       errors: [
@@ -131,7 +131,7 @@
         task("Teste e salve", "Projeto inteiro", "Bandeira → setas → C", 'Clique na bandeira. Ande com as setas e aperte <strong>C</strong>. Repita algumas vezes. Depois, salve como <code>aventura-3.sb3</code>.', [], "Você consegue capturar várias vezes seguidas, em lugares diferentes.")
       ],
       scripts: [{name: "Pokebola · tecla C", blocks: [keyHat("c"), ["look", "mostre"], m("vá para x: (-140) y: (-20)"), m("deslize por (1) segs. até [Pokemon ▾]"), ["control", "repita (3) vezes", sway], ["event", "transmita [capturado ▾]"], ["control", "espere (1) seg"], ["look", "esconda"]]}, {name: "Pokemon · ao ser capturado", blocks: [["event", "quando eu receber [capturado ▾]"], ["look", "diga [Fui capturado!] por (1) segundos"], ...reappear]}],
-      checks: ["A tecla C lança a Pokébola uma única vez.", "Só o balanço está dentro do repita 3 vezes.", "Criei a mensagem capturado e o Pokémon reage a ela.", "Depois da captura, o Pokémon reaparece em outro lugar.", "Salvei como aventura-3.sb3."],
+      checks: ["A tecla C lança a Pokébola uma única vez.", "Só o balanço está dentro do repita 3 vezes.", "Criei a mensagem capturado e o Pokémon reage a ela.", "Depois da captura, o Pokémon reaparece em outro lugar.", "Salvei como aventura-3.sb3 (no site, o jogo é salvo sozinho)."],
       expected: "Ao apertar C, a Pokébola sai da esquerda, voa até o Pokémon, balança três vezes e some. O Pokémon diz “Fui capturado!”, desaparece e surge em outro ponto.",
       tests: ["Troque 3 por 1 no repita: deve acontecer um único balanço.", "Troque 3 por 5: cinco balanços, mas só um lançamento.", "Ande com as setas e aperte C: a Pokébola encontra o Pokémon onde ele estiver."],
       errors: [
@@ -166,7 +166,7 @@
         task("Teste e salve", "Projeto inteiro", "Bandeira → E, E, E → C → E", 'Clique na bandeira. Aperte E três vezes. Capture com C. Aperte E de novo até ver o novo nome. Salve como <code>aventura-4.sb3</code>.', [], "A equipe começa com 3 e cresce a cada captura.")
       ],
       scripts: [{name: "Pokemon · final da bandeira", blocks: [["data", "apague todos os itens de [equipe ▾]"], ["data", "adicione [Pikachu] a [equipe ▾]"], ["data", "adicione [Charmander] a [equipe ▾]"], ["data", "adicione [Squirtle] a [equipe ▾]"], ["data", "mude [posição ▾] para (0)"]]}, {name: "Pokemon · tecla E", blocks: [keyHat("e"), ["data", "adicione (1) a [posição ▾]"], ["control", "se <(posição) > (tamanho de [equipe ▾])> então", [["data", "mude [posição ▾] para (1)"]]], ["look", "diga (item (posição) de [equipe ▾]) por (1) segundos"]]}],
-      checks: ["Criei a lista equipe e a variável posição.", "A bandeira limpa a lista e coloca 3 nomes.", "A tecla E mostra um nome de cada vez, pela posição.", "Depois do último nome, volta para o primeiro.", "Cada captura acrescenta um nome à equipe.", "Salvei como aventura-4.sb3."],
+      checks: ["Criei a lista equipe e a variável posição.", "A bandeira limpa a lista e coloca 3 nomes.", "A tecla E mostra um nome de cada vez, pela posição.", "Depois do último nome, volta para o primeiro.", "Cada captura acrescenta um nome à equipe.", "Salvei como aventura-4.sb3 (no site, o jogo é salvo sozinho)."],
       expected: "Na bandeira, a equipe tem 3 nomes. Apertando E, o Pokémon diz Pikachu, Charmander, Squirtle e volta ao começo. Depois de uma captura, a lista ganha mais um nome e o E também o mostra.",
       tests: ["Clique na bandeira duas vezes: a lista continua com 3 itens.", "Capture duas vezes: a lista fica com 5 itens.", "Aperte E várias vezes: depois do último item, volta para Pikachu."],
       errors: [
@@ -201,7 +201,7 @@
         task("Teste e salve", "Projeto inteiro", "Bandeira → M", 'Clique na bandeira, aperte M e teste (1,1), (1,2) e (3,3). Salve como <code>aventura-5.sb3</code>.', [], "Caminho, árvore e ginásio aparecem nos lugares certos.")
       ],
       scripts: [{name: "Pokemon · final da bandeira", blocks: [["data", "apague todos os itens de [mapa ▾]"], ["data", "adicione [0] a [mapa ▾]"], ["data", "adicione [1] a [mapa ▾]"], ["data", "adicione [0] a [mapa ▾]"], ["data", "adicione [0] a [mapa ▾]"], ["data", "adicione [1] a [mapa ▾]"], ["data", "adicione [0] a [mapa ▾]"], ["data", "adicione [0] a [mapa ▾]"], ["data", "adicione [0] a [mapa ▾]"], ["data", "adicione [2] a [mapa ▾]"]]}, {name: "Pokemon · tecla M", blocks: [keyHat("m"), ["sense", "pergunte [Qual linha? (1, 2 ou 3)] e espere"], ["data", "mude [linha ▾] para (resposta)"], ["sense", "pergunte [Qual coluna? (1, 2 ou 3)] e espere"], ["data", "mude [coluna ▾] para (resposta)"], ["data", "mude [índice ▾] para (((linha) - (1)) * (3) + (coluna))"], ["data", "mude [terreno ▾] para (item (índice) de [mapa ▾])"], ["control", "se <(terreno) = (0)> então", [["look", "diga [Caminho livre!] por (2) segundos"]]], ["control", "se <(terreno) = (1)> então", [["look", "diga [Uma árvore bloqueia o caminho.] por (2) segundos"]]], ["control", "se <(terreno) = (2)> então", [["look", "diga [Encontrei o ginásio!] por (2) segundos"]]]]}],
-      checks: ["A lista mapa tem 9 itens separados.", "A tecla M pergunta linha e coluna e guarda as duas.", "Calculei o índice com a fórmula.", "Usei o índice para ler o terreno.", "As três falas aparecem nos lugares certos.", "Salvei como aventura-5.sb3."],
+      checks: ["A lista mapa tem 9 itens separados.", "A tecla M pergunta linha e coluna e guarda as duas.", "Calculei o índice com a fórmula.", "Usei o índice para ler o terreno.", "As três falas aparecem nos lugares certos.", "Salvei como aventura-5.sb3 (no site, o jogo é salvo sozinho)."],
       expected: "Ao apertar M e digitar linha 1, coluna 2, o Pokémon diz que há uma árvore. Com linha 3, coluna 3, diz que encontrou o ginásio.",
       tests: ["(1, 1) → índice 1 → Caminho livre.", "(2, 2) → índice 5 → Árvore.", "(3, 3) → índice 9 → Ginásio."],
       errors: [
@@ -235,7 +235,7 @@
         task("Salve", "Projeto inteiro", "Arquivo → Baixar para o seu computador", 'Volte para <strong>balançar (3)</strong> e salve como <code>aventura-6.sb3</code>.', [], "O jogo funciona igual, mas o código ficou mais organizado.")
       ],
       scripts: [{name: "Pokebola · definição", blocks: [["custom", "defina balançar (vezes)"], ["control", "repita (vezes) vezes", sway]]}, {name: "Pokebola · tecla C", blocks: [keyHat("c"), ["look", "mostre"], m("vá para x: (-140) y: (-20)"), m("deslize por (1) segs. até [Pokemon ▾]"), ["custom", "balançar (3)"], ["event", "transmita [capturado ▾]"], ["control", "espere (1) seg"], ["look", "esconda"]]}],
-      checks: ["Criei o bloco balançar no ator Pokebola.", "O bloco tem o parâmetro vezes.", "O repita da definição usa o oval vezes.", "A tecla C chama balançar (3).", "Salvei como aventura-6.sb3."],
+      checks: ["Criei o bloco balançar no ator Pokebola.", "O bloco tem o parâmetro vezes.", "O repita da definição usa o oval vezes.", "A tecla C chama balançar (3).", "Salvei como aventura-6.sb3 (no site, o jogo é salvo sozinho)."],
       expected: "A captura funciona igual à missão 3, mas a tecla C agora tem um bloco rosa balançar (3). Trocando o número, muda a quantidade de balanços.",
       tests: ["balançar (1) → um balanço.", "balançar (5) → cinco balanços.", "No fim, a Pokébola está no mesmo x de antes do balanço."],
       errors: [
@@ -270,7 +270,7 @@
         task("Teste e salve", "Projeto inteiro", "Bandeira → C, C, C", 'Clique na bandeira e capture 3 vezes. Salve como <code>aventura-7.sb3</code>.', [], "capturas = 3 e XP = 30.")
       ],
       scripts: [{name: "Pokemon · definição", blocks: [["custom", "defina calcular XP (qtd)"], ["data", "mude [XP ▾] para ((qtd) * (10))"]]}, {name: "Pokemon · tecla X (teste)", blocks: [keyHat("x"), ["sense", "pergunte [Quantas capturas?] e espere"], ["custom", "calcular XP (resposta)"], ["look", "diga (junte [XP: ] com (XP)) por (2) segundos"]]}, {name: "Pokemon · quando eu receber capturado", blocks: [["event", "quando eu receber [capturado ▾]"], ["look", "diga [Fui capturado!] por (1) segundos"], ["data", "adicione [Bulbasaur] a [equipe ▾]"], ["data", "adicione (1) a [capturas ▾]"], ["custom", "calcular XP (capturas)"], ["look", "diga (junte [XP da equipe: ] com (XP)) por (1) segundos"], ...reappear]}],
-      checks: ["Criei as variáveis capturas e XP.", "O bloco calcular XP tem a entrada qtd.", "A conta multiplica qtd por 10.", "A tecla X testa o cálculo com qualquer número.", "Cada captura soma 1 e o XP aumenta 10.", "Salvei como aventura-7.sb3."],
+      checks: ["Criei as variáveis capturas e XP.", "O bloco calcular XP tem a entrada qtd.", "A conta multiplica qtd por 10.", "A tecla X testa o cálculo com qualquer número.", "Cada captura soma 1 e o XP aumenta 10.", "Salvei como aventura-7.sb3 (no site, o jogo é salvo sozinho)."],
       expected: "A tecla X responde 3 → XP 30. No jogo, cada captura aumenta capturas em 1 e o XP em 10, e o Pokémon diz o XP da equipe.",
       tests: ["Tecla X com 0 → XP 0.", "Tecla X com 7 → XP 70.", "Bandeira + 2 capturas → capturas 2, XP 20."],
       errors: [

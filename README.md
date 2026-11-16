@@ -15,4 +15,10 @@ Site: https://eduardo97mendes.github.io/algoritmos-2/
 | 7 Calcule o XP | Função | X: testar XP; captura soma XP |
 | 8 Expedição final | Projeto integrado | o ginásio dispara a captura; cenários |
 
-Conteúdo das missões: `lessons.js`. Montagem da página: `script.js`.
+Na etapa **Monte**, cada missão oferece três caminhos:
+
+1. **Assistir à explicação**: o código pronto roda devagar, bloco por bloco, com narração.
+2. **Montar aqui no site**: editor de blocos parecido com o Scratch (Blockly), com palco, teclas, variáveis/listas e metas conferidas automaticamente. O jogo fica salvo no navegador e continua na missão seguinte.
+3. **Montar no Scratch**: passo a passo no scratch.mit.edu.
+
+Arquivos: `lessons.js` (conteúdo das missões), `lab.js` (editor, interpretador, explicação animada e metas), `script.js` (montagem da página), `vendor/` (Blockly, licença Apache 2.0).
